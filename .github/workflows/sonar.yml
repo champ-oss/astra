@@ -16,19 +16,15 @@ jobs:
         go-version: 1.17
 
     - name: Unit Tests
-      working-directory: src
       run: go test -v ./...
 
     - name: Generate Coverage Report
-      working-directory: src
       run: |
         go test -json -coverprofile=cover.out ./... > result.json
         go tool cover -func cover.out
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
-      with:
-        projectBaseDir: src
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
