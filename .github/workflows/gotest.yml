@@ -1,0 +1,43 @@
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  gotest:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Install gotestsum
+      run: go install gotest.tools/gotestsum@latest
+
+    - name: Unit Tests
+      run: gotestsum --junitfile report.xml -- -coverprofile=cover.out ./...
+
+    - name: Publish Unit Test Results
+      uses: dorny/test-reporter@v1.5.0
+      if: always()
+      with:
+        name: gotest
+        path: report.xml
+        reporter: java-junit
+
+    - name: Generate Coverage Report
+      run: go tool cover -func cover.out
+
+    - name: Minimum Coverage Percent
+      env:
+          MIN: 80
+      run: |
+            pct=`go tool cover -func=cover.out | grep total | grep -Eo '[0-9]+\.[0-9]+'`
+            echo "Current test coverage : $pct %"
+            if (( $(echo "$pct $MIN" | awk '{print ($1 > $2)}') )); then
+                echo "OK"
+            else
+                echo "Current test coverage is below threshold of $MIN percent"
+                exit 1
+            fi
