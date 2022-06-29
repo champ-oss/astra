@@ -86,6 +86,10 @@ type organizationRepos struct {
 	} `graphql:"organization(login:$login)"`
 }
 
+var owner string
+var appId int64
+var installationId int64
+var pem []byte
 var debug bool
 var dryRun bool
 var repoPrefixes []string
@@ -99,14 +103,13 @@ var expectRequiresStrictStatusChecks bool
 var expectRequiresApprovingReviews bool
 var expectRequiredStatusChecks int
 
-func main() {
+func loadConfig() {
 	setLogging("INPUT_DEBUG")
 	setDryRun("INPUT_DRY_RUN")
-
-	owner := os.Getenv("INPUT_OWNER")
-	appId := getEnvInt64("INPUT_APP_ID")
-	installationId := getEnvInt64("INPUT_INSTALLATION_ID")
-	pem := getEnvBase64("INPUT_PEM")
+	owner = os.Getenv("INPUT_OWNER")
+	appId = getEnvInt64("INPUT_APP_ID")
+	installationId = getEnvInt64("INPUT_INSTALLATION_ID")
+	pem = getEnvBase64("INPUT_PEM")
 	repoPrefixes = getEnvStringList("INPUT_REPO_PREFIXES")
 	actors = getEnvStringList("INPUT_ACTORS")
 	defaultBranch = getEnvString("INPUT_DEFAULT_BRANCH")
@@ -117,7 +120,10 @@ func main() {
 	expectRequiresStrictStatusChecks = getEnvBool("EXPECT_REQUIRES_STRICT_STATUS_CHECKS", true)
 	expectRequiresApprovingReviews = getEnvBool("EXPECT_REQUIRES_APPROVING_REVIEWS", true)
 	expectRequiredStatusChecks = getEnvInt("EXPECT_REQUIRED_STATUS_CHECKS")
+}
 
+func main() {
+	loadConfig()
 	client, err := getClient(appId, installationId, pem)
 	if err != nil {
 		panic(err)
@@ -472,15 +478,15 @@ func shouldEnableAutoMerge(rules []branchProtectionRule) bool {
 			log.Debugf("RequiredApprovingReviewCount is < %d", expectRequiredApprovingReviewCount)
 			return false
 		}
-		if expectRequiresStatusChecks && rule.RequiresStatusChecks == false {
+		if githubv4.Boolean(expectRequiresStatusChecks) && !rule.RequiresStatusChecks {
 			log.Debugf("RequiresStatusChecks is false")
 			return false
 		}
-		if expectRequiresStrictStatusChecks && rule.RequiresStrictStatusChecks == false {
+		if githubv4.Boolean(expectRequiresStrictStatusChecks) && !rule.RequiresStrictStatusChecks {
 			log.Debugf("RequiresStrictStatusChecks is false")
 			return false
 		}
-		if expectRequiresApprovingReviews && rule.RequiresApprovingReviews == false {
+		if githubv4.Boolean(expectRequiresApprovingReviews) && !rule.RequiresApprovingReviews {
 			log.Debugf("RequiresApprovingReviews is false")
 			return false
 		}
