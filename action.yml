@@ -40,6 +40,26 @@ inputs:
     description: 'A workflow will not be restarted if it has failed this many times'
     required: false
     default: '3'
+  expect-required-approving-review-count:
+    description: 'Expect branch protection to require at least this number of approving reviews'
+    required: false
+    default: '1'
+  expect-requires-status-checks:
+    description: 'Expect branch protection to require status checks'
+    required: false
+    default: 'true'
+  expect-requires-strict-status-checks:
+    description: 'Expect branch protection to require branches be up to date before merging'
+    required: false
+    default: 'true'
+  expect-requires-approving-reviews:
+    description: 'Expect branch protection to require approving reviews before merging'
+    required: false
+    default: 'true'
+  expect-required-status-checks:
+    description: 'Expect branch protection to require at least this number of passing status checks'
+    required: false
+    default: '1'
 
 runs:
   using: "composite"
@@ -59,3 +79,8 @@ runs:
         INPUT_DEFAULT_BRANCH: ${{ inputs.default-branch }}
         INPUT_WAIT_SECONDS_BETWEEN_REQUESTS: ${{ inputs.wait-seconds-between-requests }}
         INPUT_MAX_RUN_ATTEMPTS: ${{ inputs.max-run-attempts }}
+        EXPECT_REQUIRED_APPROVING_REVIEW_COUNT: ${{ inputs.expect-required-approving-review-count }}
+        EXPECT_REQUIRES_STATUS_CHECKS: ${{ inputs.expect-requires-status-checks }}
+        EXPECT_REQUIRES_STRICT_STATUS_CHECKS: ${{ inputs.expect-requires-strict-status-checks }}
+        EXPECT_REQUIRES_APPROVING_REVIEWS: ${{ inputs.expect-requires-approving-reviews }}
+        EXPECT_REQUIRED_STATUS_CHECKS: ${{ inputs.expect-required-status-checks }}

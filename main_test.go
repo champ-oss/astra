@@ -36,6 +36,20 @@ var GetWorkflowRunByID = mock.EndpointPattern{
 	Method:  "GET",
 }
 
+func Test_loadConfig(t *testing.T) {
+	_ = os.Setenv("INPUT_APP_ID", "123")
+	_ = os.Setenv("INPUT_INSTALLATION_ID", "123")
+	_ = os.Setenv("INPUT_PEM", "LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDWFFJQkFBS0JnUUMyVXJtTXorZlhOMkZDWkxDQVRKSkVoSnJZVlp5WG12WWNuTXdyM1ZMTitReE04V0tKCk9rMEhTaXhhaDRJdzQ1bll5c01tRm91R1J2dWtWQ0UrZm0wb0g0ZkVjRFZ0OU1INitsdGVlRUgvMVg1cnRpNmIKVWtXdzBEcktmR09teVhUWTVCWHhSVWQ1Y3pkaWcvSThmMnJoNGk0K3VyV0NHenBETlV1dG1mcDlKd0lEQVFBQgpBb0dBYmpNNks3NU9aMnIxd21lUnR6cVEvaEVZZHNIb1VFbzlqN1hHUW8wWHk1OUlyQWtLZ2Q5WFI1eXhpbFoxCmZvOVRJaElNT2kxT1QrNy9rcWUzSUVyU05uVU5xem9DNzdBeXBZbkRGbDV1VjZSeHlKeW52WVFYbHNCVEUyTEoKVDRKaWNEeFZYbmJKQllKSzJpb0FkcU45dnVnN2FPc2sxU3ltWmFES2YwRjd3dUVDUVFEWVJ2Y0xERUYraFlDQQpXYXk5UGsxdVQ2VjJ3UlNxYjdxMjNlWmlXamhyT1dGd0JRSkRNb0NpNnZ2RkJ6Vm8zSUNZVVh1Y1htRzJVMGYxCjFmR0VSYy9MQWtFQTE4OUtOR1J3UDRWZHg1U25xaTVXVkp6WEQ1Tm92MU8wOUtzNGZneUV0SUp2azZ2V3o1S28KQ05UcWphRXEvcjdCMUF1bDVBSjlOdkZCWEVHL29HQWtsUUpCQU5UK1hvRjAybk5keXNXY2l1LzhrWWtYeXg1KwozSGxWZTQ1b1RtR0I5Sm8wY204OW41TEtBOEZ1cGZET1BwMDh1ekJHM3ZPS1I3U2xvL0xKZGdjTU1hMENRUUN6Cjc3YnNOaTVOR0RMWC9IOUxhclU2ZVViclNyb1VoSU9sV0xtU2gzZUNWaHNYNGpnSi9EcTBtbW95eW9WaHY4VTIKdXJ1SGYvZk0vcHpEZ21KM0lwSjlBa0JEajRQTDlnVWF4d0VqY0crSjNJbmJSWnlGU0NFVHVnajllREpWeFprNApsVjhnS1NpT2JVRFViMkJQM29SekZPTHFZbXhveHNnTUt4RWNxbGVTRzg1MQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=")
+	_ = os.Setenv("INPUT_REPO_PREFIXES", "foo")
+	_ = os.Setenv("INPUT_ACTORS", "foo")
+	_ = os.Setenv("INPUT_DEFAULT_BRANCH", "main")
+	_ = os.Setenv("INPUT_WAIT_SECONDS_BETWEEN_REQUESTS", "1")
+	_ = os.Setenv("INPUT_MAX_RUN_ATTEMPTS", "1")
+	_ = os.Setenv("EXPECT_REQUIRED_APPROVING_REVIEW_COUNT", "1")
+	_ = os.Setenv("EXPECT_REQUIRED_STATUS_CHECKS", "1")
+	loadConfig()
+}
+
 func Test_containsString(t *testing.T) {
 	t.Parallel()
 	t.Run("does contain", func(t *testing.T) {
@@ -321,6 +335,7 @@ func Test_enablePullRequestAutoMerge(t *testing.T) {
 	})
 
 	t.Run("failure", func(t *testing.T) {
+		dryRun = false
 		mux := http.NewServeMux()
 		mux.HandleFunc("/graphql", func(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
@@ -546,6 +561,12 @@ func Test_processPullRequestCheckSuites(t *testing.T) {
 }
 
 func Test_shouldEnableAutoMerge(t *testing.T) {
+	expectRequiredApprovingReviewCount = 1
+	expectRequiresStatusChecks = true
+	expectRequiresStrictStatusChecks = true
+	expectRequiresApprovingReviews = true
+	expectRequiredStatusChecks = 1
+
 	t.Run("no default branch match", func(t *testing.T) {
 		rules := []branchProtectionRule{
 			{
