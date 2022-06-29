@@ -172,7 +172,7 @@ func processRepos(repos []string, client *github.Client, clientV4 *githubv4.Clie
 			continue
 		}
 
-		if results.Repository.IsArchived == true {
+		if results.Repository.IsArchived {
 			log.Infof("Will not process archived repo: %s", repo)
 			continue
 		}
