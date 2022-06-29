@@ -93,6 +93,11 @@ var actors []string
 var defaultBranch string
 var waitSecondsBetweenRequests int
 var maxRunAttempts int
+var expectRequiredApprovingReviewCount int
+var expectRequiresStatusChecks bool
+var expectRequiresStrictStatusChecks bool
+var expectRequiresApprovingReviews bool
+var expectRequiredStatusChecks int
 
 func main() {
 	setLogging("INPUT_DEBUG")
@@ -107,6 +112,11 @@ func main() {
 	defaultBranch = getEnvString("INPUT_DEFAULT_BRANCH")
 	waitSecondsBetweenRequests = getEnvInt("INPUT_WAIT_SECONDS_BETWEEN_REQUESTS")
 	maxRunAttempts = getEnvInt("INPUT_MAX_RUN_ATTEMPTS")
+	expectRequiredApprovingReviewCount = getEnvInt("EXPECT_REQUIRED_APPROVING_REVIEW_COUNT")
+	expectRequiresStatusChecks = getEnvBool("EXPECT_REQUIRES_STATUS_CHECKS", true)
+	expectRequiresStrictStatusChecks = getEnvBool("EXPECT_REQUIRES_STRICT_STATUS_CHECKS", true)
+	expectRequiresApprovingReviews = getEnvBool("EXPECT_REQUIRES_APPROVING_REVIEWS", true)
+	expectRequiredStatusChecks = getEnvInt("EXPECT_REQUIRED_STATUS_CHECKS")
 
 	client, err := getClient(appId, installationId, pem)
 	if err != nil {
@@ -458,24 +468,24 @@ func shouldEnableAutoMerge(rules []branchProtectionRule) bool {
 		if string(rule.Pattern) != defaultBranch {
 			continue
 		}
-		if rule.RequiredApprovingReviewCount < 1 {
-			log.Debugf("RequiredApprovingReviewCount is < 1")
+		if rule.RequiredApprovingReviewCount < githubv4.Int(expectRequiredApprovingReviewCount) {
+			log.Debugf("RequiredApprovingReviewCount is < %d", expectRequiredApprovingReviewCount)
 			return false
 		}
-		if !rule.RequiresStatusChecks {
+		if expectRequiresStatusChecks && rule.RequiresStatusChecks == false {
 			log.Debugf("RequiresStatusChecks is false")
 			return false
 		}
-		if !rule.RequiresStrictStatusChecks {
+		if expectRequiresStrictStatusChecks && rule.RequiresStrictStatusChecks == false {
 			log.Debugf("RequiresStrictStatusChecks is false")
 			return false
 		}
-		if !rule.RequiresApprovingReviews {
+		if expectRequiresApprovingReviews && rule.RequiresApprovingReviews == false {
 			log.Debugf("RequiresApprovingReviews is false")
 			return false
 		}
-		if len(rule.RequiredStatusChecks) < 1 {
-			log.Debugf("RequiredStatusChecks < 1")
+		if len(rule.RequiredStatusChecks) < expectRequiredStatusChecks {
+			log.Debugf("RequiredStatusChecks < %d", expectRequiredStatusChecks)
 			return false
 		}
 		log.Debugf("successfully validated branch protection rules for %s branch", defaultBranch)

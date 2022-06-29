@@ -546,6 +546,12 @@ func Test_processPullRequestCheckSuites(t *testing.T) {
 }
 
 func Test_shouldEnableAutoMerge(t *testing.T) {
+	expectRequiredApprovingReviewCount = 1
+	expectRequiresStatusChecks = true
+	expectRequiresStrictStatusChecks = true
+	expectRequiresApprovingReviews = true
+	expectRequiredStatusChecks = 1
+
 	t.Run("no default branch match", func(t *testing.T) {
 		rules := []branchProtectionRule{
 			{

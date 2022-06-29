@@ -91,6 +91,11 @@ If a permission is not listed below then the default setting (no access) should 
 | default-branch | false | The name of the default branch for your repositories |
 | wait-seconds-between-requests | false | Slow down requests against the GitHub API to avoid throttling |
 | max-run-attempts | false | A workflow will not be restarted if it has failed this many times |
+| expect-required-approving-review-count | false | Expect branch protection to require at least this number of approving reviews |
+| expect-requires-status-checks | false | Expect branch protection to require status checks |
+| expect-requires-strict-status-checks | false | Expect branch protection to require branches be up to date before merging |
+| expect-requires-approving-reviews | false | Expect branch protection to require approving reviews before merging |
+| expect-required-status-checks | false | Expect branch protection to require at least this number of passing status checks |
 
 
 ## Contributing
