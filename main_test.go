@@ -294,6 +294,17 @@ func Test_processRepos(t *testing.T) {
 	processRepos([]string{"abc123"}, client, clientV4, testOwner)
 }
 
+func Test_processRepos_Archived(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/graphql", func(w http.ResponseWriter, req *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"data": {"repository": {"id": "abc123", "isArchived": true}}}`)
+	})
+	clientV4 := githubv4.NewClient(&http.Client{Transport: localRoundTripper{handler: mux}})
+	client := github.NewClient(&http.Client{})
+	processRepos([]string{"abc123"}, client, clientV4, testOwner)
+}
+
 func Test_runRepoPullRequestsQuery(t *testing.T) {
 	// https://github.com/shurcooL/githubv4/blob/master/githubv4_test.go
 	t.Run("successful", func(t *testing.T) {

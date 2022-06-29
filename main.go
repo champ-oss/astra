@@ -61,6 +61,7 @@ type branchProtectionRule struct {
 type repoPullRequestsQuery struct {
 	Repository struct {
 		ID           githubv4.ID
+		IsArchived   githubv4.Boolean
 		PullRequests struct {
 			Nodes []pullRequest
 		} `graphql:"pullRequests(states:OPEN, last:20)"`
@@ -168,6 +169,11 @@ func processRepos(repos []string, client *github.Client, clientV4 *githubv4.Clie
 		results, err := runRepoPullRequestsQuery(clientV4, owner, repo)
 		if err != nil {
 			log.Errorf("error running runRepoPullRequestsQuery: %s", err)
+			continue
+		}
+
+		if results.Repository.IsArchived {
+			log.Infof("Will not process archived repo: %s", repo)
 			continue
 		}
 
