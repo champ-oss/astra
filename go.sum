@@ -28,8 +28,8 @@ github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD
 github.com/google/go-querystring v1.1.0/go.mod h1:Kcdr2DB4koayq7X8pmAG4sNG59So17icRSOU623lUBU=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
-github.com/migueleliasweb/go-github-mock v0.0.16 h1:iEx6iqYASRJVoEO5eMOYpQZFTc00cZ6ysynOArUKM3A=
-github.com/migueleliasweb/go-github-mock v0.0.16/go.mod h1:CjrgPd8s5sf5g3XSESAQqxufae+PZbgM/F317C3uD7g=
+github.com/migueleliasweb/go-github-mock v0.0.17 h1:IJMM3hj87vTA4Q+W/GFJZTkv85aOM4k9ZpMekFEJZrU=
+github.com/migueleliasweb/go-github-mock v0.0.17/go.mod h1:CjrgPd8s5sf5g3XSESAQqxufae+PZbgM/F317C3uD7g=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2 h1:82EIpiGB79OIPgSGa63Oj4Ipf+YAX1c6A9qjmEYoRXc=
