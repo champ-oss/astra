@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: golangci/golangci-lint-action@v3.6.0
+      - uses: golangci/golangci-lint-action@v3.7.0
         with:
           args: "--out-${NO_FUTURE}format colored-line-number"
