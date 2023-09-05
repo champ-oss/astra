@@ -7,7 +7,7 @@ jobs:
   golint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: golangci/golangci-lint-action@v3.6.0
         with:
           args: "--out-${NO_FUTURE}format colored-line-number"
