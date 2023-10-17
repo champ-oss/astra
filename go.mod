@@ -3,7 +3,7 @@ module github.com/champ-oss/astra
 go 1.17
 
 require (
-	github.com/bradleyfalzon/ghinstallation/v2 v2.2.0
+	github.com/bradleyfalzon/ghinstallation/v2 v2.8.0
 	github.com/google/go-github/v43 v43.0.0
 	github.com/migueleliasweb/go-github-mock v0.0.18
 	github.com/shurcooL/githubv4 v0.0.0-20220115235240-a14260e6f8a2
@@ -17,8 +17,8 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-github/v50 v50.1.0 // indirect
 	github.com/google/go-github/v52 v52.0.0 // indirect
+	github.com/google/go-github/v56 v56.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
