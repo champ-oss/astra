@@ -9,11 +9,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.ACTION_TOKEN }}
 
-      - uses: champ-oss/file-sync@v1.0.53-36f6a50
+      - uses: champ-oss/file-sync@v1.0.41-5e961bb
         with:
           token: ${{ secrets.ACTION_TOKEN }}
           repo: champ-oss/terraform-module-template
@@ -22,4 +22,6 @@ jobs:
             LICENSE
             .tflint.hcl
             .github/CODEOWNERS
+            .github/dependabot.yml
+            .github/workflows/lint.yml
             .github/workflows/release.yml
