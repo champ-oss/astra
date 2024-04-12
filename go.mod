@@ -1,6 +1,8 @@
 module github.com/champ-oss/astra
 
-go 1.17
+go 1.21
+
+toolchain go1.21.5
 
 require (
 	github.com/bradleyfalzon/ghinstallation/v2 v2.10.0
